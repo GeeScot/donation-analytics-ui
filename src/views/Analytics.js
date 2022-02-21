@@ -6,7 +6,7 @@ const Analytics = () => {
 
   // useEffect to get the campaign
   // if it is not cached redirect to home page
-  // else load stats
+  // else get analytics
 
   return (
     <Container>

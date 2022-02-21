@@ -32,7 +32,7 @@ const Home = () => {
       const userId = campaignUrlData[2];
       const campaignSlug = campaignUrlData[3];
 
-      const { data: campaignDetails } = await client.get(`/tiltify/${userId}/${campaignSlug}`);
+      const { data: campaignDetails } = await client.get(`/campaign/${userId}/${campaignSlug}`);
       if (campaignDetails.isCached) {
         navigate(`/${userId}/${campaignSlug}`);
         return;
@@ -41,11 +41,11 @@ const Home = () => {
       setCampaign(campaignDetails.campaign);
 
       setLoadingStatus('Getting Donations from Tiltify');
-      await client.get(`/tiltify/${userId}/${campaignSlug}/cache`);
+      await client.get(`/campaign/${userId}/${campaignSlug}/cache`);
       await sleep(1000);
 
       setLoadingStatus('Calculating');
-      await client.get(`/tiltify/${userId}/${campaignSlug}/calculate`);
+      await client.get(`/campaign/${userId}/${campaignSlug}/calculate`);
       await sleep(1000);
 
       navigate(`/${userId}/${campaignSlug}`);
