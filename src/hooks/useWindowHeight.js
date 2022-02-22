@@ -10,7 +10,6 @@ const useWindowHeight = () => {
         return;
       }
 
-      console.log(window.innerHeight);
       setHeight(window.innerHeight);
     }
 
