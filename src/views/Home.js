@@ -17,10 +17,12 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [loadingStatus, setLoadingStatus] = useState(null);
   const navigate = useNavigate();
+
   const client = axios.create({
     baseURL: `${process.env.REACT_APP_API_URL}`
   });
 
+  // move client to hook/callback?
   const configureCampaign = async () => {
     try {
       const sleep = ms => new Promise(r => setTimeout(r, ms));

@@ -6,7 +6,7 @@ import { faCircleDollarToSlot } from '@fortawesome/free-solid-svg-icons';
 import { faCircleUser } from '@fortawesome/free-regular-svg-icons';
 
 const CampaignCard = ({ campaign }) => {
-  const numberFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: campaign?.causeCurrency ?? 'USD' });
+  const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: campaign?.causeCurrency ?? 'USD' });
 
   return (
     <Container>
@@ -17,7 +17,7 @@ const CampaignCard = ({ campaign }) => {
       </Detail>
       <Detail>
         <FontAwesomeIcon icon={faCircleDollarToSlot} />
-        { numberFormatter.format(campaign.totalAmountRaised) } out of { numberFormatter.format(campaign.fundraiserGoalAmount) }
+        { formatter.format(campaign.totalAmountRaised) } out of { formatter.format(campaign.fundraiserGoalAmount) }
       </Detail>
       {campaign.livestream.type === 'twitch' &&
         <Detail>
@@ -44,10 +44,8 @@ const Container = styled.div`
 
   padding: 20px 25px;
 
-  border: 1px solid #cccccc;
-  border-radius: 6px;
-
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  border-top: 1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
 `;
 
 const Header = styled.div`
