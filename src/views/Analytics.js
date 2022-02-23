@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
+import { CircleLoader } from 'react-spinners';
+
+import { CustomStyles } from '../styles/custom';
 import CampaignCard from '../components/CampaignCard';
 import AnalyticsCard from '../components/AnalyticsCard';
 import HourlyBalanceChart from '../components/charts/HourlyBalance';
@@ -15,11 +18,8 @@ const Analytics = () => {
   const [campaign, setCampaign] = useState(null);
   const [analytics, setAnalytics] = useState(null);
   const [donations, setDonations] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  // useEffect to get the campaign
-  // if it is not cached redirect to home page
-  // else get analytics
 
   useEffect(() => {
     const get = async () => {
@@ -28,6 +28,8 @@ const Analytics = () => {
       });
 
       try {
+        setLoading(true);
+
         const { data: campaignDetails } = await client.get(`/campaign/${userId}/${campaignSlug}`);
         if (!campaignDetails.isCached) {
           navigate('/');
@@ -43,11 +45,13 @@ const Analytics = () => {
         setDonations(donationsResponse);
       } catch(e) {
         console.log(e);
+      } finally {
+        setLoading(false);
       }
     }
 
     get();
-  }, [userId, campaignSlug, navigate, setCampaign, setAnalytics, setDonations]);
+  }, [userId, campaignSlug, navigate, setLoading, setCampaign, setAnalytics, setDonations]);
 
   const isReady = () => {
     return campaign && analytics && donations;
@@ -56,6 +60,7 @@ const Analytics = () => {
   return (
     <Container>
       <h2>{ userId }/{ campaignSlug }</h2>
+      {loading && <CircleLoader loading={true} size={40} color={CustomStyles.colors.darkGrey} />}
       {campaign && <CampaignCard campaign={campaign} />}
       {isReady() &&
         <>
