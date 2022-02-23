@@ -19,7 +19,7 @@ const CampaignCard = ({ campaign }) => {
         <FontAwesomeIcon icon={faCircleDollarToSlot} />
         { formatter.format(campaign.totalAmountRaised) } out of { formatter.format(campaign.fundraiserGoalAmount) }
       </Detail>
-      {campaign.livestream.type === 'twitch' &&
+      {campaign.livestream?.type === 'twitch' &&
         <Detail>
           <FontAwesomeIcon icon={faTwitch} />
           <a

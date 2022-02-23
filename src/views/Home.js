@@ -9,6 +9,8 @@ import CampaignUrl from '../components/CampaignUrl';
 import CampaignCard from '../components/CampaignCard';
 import useWindowHeight from '../hooks/useWindowHeight';
 import { parseCampaignUrl } from '../utils/UrlUtilities';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 const Home = () => {
   const height = useWindowHeight();
@@ -16,6 +18,7 @@ const Home = () => {
   const [campaign, setCampaign] = useState(null);
   const [loading, setLoading] = useState(false);
   const [loadingStatus, setLoadingStatus] = useState(null);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const client = axios.create({
@@ -52,17 +55,28 @@ const Home = () => {
 
       navigate(`/${userId}/${campaignSlug}`);
     } catch(e) {
-      console.log(e);
+      setError(e.response?.data ?? e.message);
     } finally {
       setLoading(false);
       setLoadingStatus(null);
     }
   }
 
+  const resetCampaign = () => {
+    setCampaign(null);
+    setError(null);
+  }
+
   return (
     <Container style={{ height }}>
       <Label>Tiltify Donation Analytics</Label>
       <CampaignUrl value={campaignUrl} onChange={setCampaignUrl} disabled={campaign !== null} />
+      {error &&
+        <ErrorContainer>
+          <FontAwesomeIcon icon={faTriangleExclamation} color="#ff6961" />
+          <ErrorLabel>{ error }</ErrorLabel>
+        </ErrorContainer>
+      }
       {loading &&
         <LoadingContainer>
           <CircleLoader loading={true} size={25} color={CustomStyles.colors.darkGrey} />
@@ -70,7 +84,10 @@ const Home = () => {
         </LoadingContainer>
       }
       {campaign && <CampaignCard campaign={campaign} />}
-      {(!loading && !campaign) && <ConfirmButton onClick={configureCampaign}>Confirm</ConfirmButton>}
+      <ButtonsContainer>
+        <ResetButton disabled={loading || !campaign} onClick={resetCampaign}>Reset</ResetButton>
+        <ConfirmButton disabled={loading || campaign} onClick={configureCampaign}>Confirm</ConfirmButton>
+      </ButtonsContainer>
     </Container>
   );
 }
@@ -88,17 +105,6 @@ const Container = styled.div`
 
 const Label = styled.div``;
 
-const CustomButton = styled.button`
-  width: 150px;
-  padding: 6px 0;
-
-  border: none;
-  border-radius: 6px;
-
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-  cursor: pointer;
-`;
-
 const LoadingContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -112,7 +118,51 @@ const LoadingLabel = styled.div`
   font-size: 15px;
 `;
 
+const ErrorContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+`;
+
+const ErrorLabel = styled.div`
+  font-size: 15px;
+`;
+
+const ButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+`;
+
+const CustomButton = styled.button`
+  width: 150px;
+  padding: 6px 0;
+
+  border: none;
+  border-radius: 6px;
+
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  cursor: pointer;
+`;
+
+const ResetButton = styled(CustomButton)`
+  color: #333333;
+  background-color: #ff6961;
+
+  &:disabled {
+    color: #696969;
+    background-color: #cccccc;
+    cursor: unset;
+  }
+`;
+
 const ConfirmButton = styled(CustomButton)`
-  color: #444444;
-  background-color: #3ace3a;
+  color: #333333;
+  background-color: #ffd1dc;
+
+  &:disabled {
+    color: #696969;
+    background-color: #cccccc;
+    cursor: unset;
+  }
 `;

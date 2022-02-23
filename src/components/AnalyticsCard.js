@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 const AnalyticsCard = ({ analytics, donations, causeCurrency }) => {
-  const topDonation = donations.map(x => x.amount).sort((a, b) => b - a)[0];
+  const highestDonation = donations.map(x => x.amount).sort((a, b) => b - a)[0];
+  const lowestDonation = donations.map(x => x.amount).sort((a, b) => a - b)[0];
   const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: causeCurrency ?? 'USD' });
 
   return (
@@ -24,12 +25,12 @@ const AnalyticsCard = ({ analytics, donations, causeCurrency }) => {
           <GroupValue>{analytics?.analytics.count}</GroupValue>
         </GroupRow>
         <GroupRow>
-          <GroupLabel>Top Donation</GroupLabel>
-          <GroupValue>{formatter.format(topDonation)}</GroupValue>
+          <GroupLabel>Highest Donation</GroupLabel>
+          <GroupValue>{formatter.format(highestDonation)}</GroupValue>
         </GroupRow>
         <GroupRow>
-          <GroupLabel>&nbsp;</GroupLabel>
-          <GroupValue>{}</GroupValue>
+          <GroupLabel>Lowest Donation</GroupLabel>
+          <GroupValue>{formatter.format(lowestDonation)}</GroupValue>
         </GroupRow>
       </GroupGrid>
       <Row>
@@ -75,7 +76,7 @@ const Row = styled.div`
 const GroupGrid = styled.div`
   display: grid;
   grid-auto-flow: row;
-  gap: 20px;
+  gap: 10px;
   
   padding: 20px 40px;
   width: 300px;
@@ -93,7 +94,7 @@ const GroupGrid = styled.div`
 const GroupRow = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 2fr);
-  gap: 20px;
+  gap: 10px;
   padding-bottom: 2px;
   font-size: 14px;
   &:first-child {
