@@ -103,7 +103,9 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const Label = styled.div``;
+const Label = styled.div`
+  font-size: 18px;
+`;
 
 const LoadingContainer = styled.div`
   display: flex;
@@ -140,6 +142,8 @@ const CustomButton = styled.button`
 
   border: none;
   border-radius: 6px;
+
+  font-size: 14px;
 
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
   cursor: pointer;
